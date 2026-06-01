@@ -1,8 +1,12 @@
-﻿namespace ReservationMS.Models
+﻿
+using System.ComponentModel.DataAnnotations;
+namespace ReservationMS.Models
+
 {
 
     public class Users
     {
+        [Key]
         public int UserId { get; set; }
 
         public string FullName { get; set; } = string.Empty;
