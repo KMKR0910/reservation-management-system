@@ -1,41 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReservationMS.Data;
 using ReservationMS.DTOs;
+using ReservationMS.Models;
+using ReservationMS.Data;
 using System;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.WindowsRuntime;
+
 using System.Security;
 
 namespace ReservationMS.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController:Controllers
+    public class AuthController:ControllerBase
     {
         private readonly AppDbContext _context;
 
         public AuthController(AppDbContext context)
         {
-            -context=context
+            _context = context;
         }
 
-        [HttpPost('login')]
-        public IActResult Login (LoginDto logindto)
+        [HttpPost("login")]
+        public IActionResult Login ([FromBody]LoginDto logindto)
         {
             var user = _context.Users.FirstOrDefault(x =>
-              x.Email == loginDto.Email &&
-              x.PasswordHash == loginDto.Password);
+    x.Email == logindto.Email &&
+    x.Password == logindto.Password);
 
             if (user == null)
             {
-                return UnauthorizedAccessException(new
+                return Unauthorized(new
                 {
                     message = "Invalid Email Or Password"
                 });
             }
-            return INVOKEKIND(new
+            return Ok(new
             {
-                message = "Login Success"
+                message = "Login Success",
                 user.UserId,
                 user.FullName,
                 user.Email,
